@@ -62,4 +62,15 @@ class UserController extends Controller
         $user->update(['password' => Hash::make('password123')]);
         return redirect()->back()->with('success','Password di-reset (password123)');
     }
+
+    public function destroy(User $user)
+    {
+        // Jangan hapus superadmin satu-satunya atau diri sendiri
+        if ($user->id === auth()->id()) {
+            return redirect()->back()->with('error','Tidak bisa menghapus akun Anda sendiri');
+        }
+
+        $user->delete();
+        return redirect()->route('back2me.admin.users.index')->with('success','Akun berhasil dihapus');
+    }
 }

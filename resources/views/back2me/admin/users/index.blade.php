@@ -5,6 +5,8 @@
 @section('subtitle','Kelola akun, role, dan status ban')
 
 @section('content')
+<x-delete-confirmation-modal />
+
 <div class="flex items-center justify-between mb-6">
     <div>
         <h1 class="text-xl font-semibold text-slate-900">Manajemen Pengguna</h1>
@@ -57,10 +59,17 @@
                             <a href="{{ route('back2me.admin.users.edit', $u) }}" class="btn-secondary btn-xs inline-flex items-center gap-1">
                                 <i class='bx bx-edit-alt'></i>Edit
                             </a>
-                            <form method="post" action="{{ route('back2me.admin.users.reset_password', $u) }}" class="inline" onsubmit="return confirm('Reset password ke password123?');">
+                            <form method="post" action="{{ route('back2me.admin.users.reset_password', $u) }}" class="inline delete-form" onsubmit="event.preventDefault(); showConfirmation(this, 'Reset Password', 'Reset password akun {{ $u->name }} ke password123?', 'reset');">
                                 @csrf
-                                <button type="submit" class="btn-ghost btn-xs inline-flex items-center gap-1 text-amber-700 hover:text-amber-800">
+                                <button type="submit" class="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-white bg-amber-600 hover:bg-amber-700">
                                     <i class='bx bx-reset'></i>Reset PW
+                                </button>
+                            </form>
+                            <form method="post" action="{{ route('back2me.admin.users.destroy', $u) }}" class="inline delete-form" onsubmit="event.preventDefault(); showConfirmation(this, 'Hapus Pengguna', 'Hapus akun {{ $u->name }}? Tindakan ini tidak dapat dibatalkan.');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700">
+                                    <i class='bx bx-trash'></i>Hapus
                                 </button>
                             </form>
                         </div>

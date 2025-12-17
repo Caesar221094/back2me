@@ -4,6 +4,8 @@
 @section('subtitle','Kelola kategori untuk klasifikasi laporan')
 
 @section('content')
+<x-delete-confirmation-modal />
+
 <div class="card card-hover p-6 space-y-6">
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
@@ -33,11 +35,11 @@
                             <a href="{{ route('back2me.admin.categories.edit', $category) }}" class="btn-ghost">
                                 <i class='bx bxs-edit-alt'></i> Edit
                             </a>
-                            <form action="{{ route('back2me.admin.categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Hapus kategori ini?')">
+                            <form action="{{ route('back2me.admin.categories.destroy', $category) }}" method="POST" class="inline delete-form" onsubmit="event.preventDefault(); showConfirmation(this, 'Hapus Kategori', 'Hapus kategori {{ $category->nama }}? Tindakan ini tidak dapat dibatalkan.');">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn-ghost text-red-700 bg-red-50 hover:bg-red-100">
-                                    <i class='bx bxs-trash'></i> Hapus
+                                <button type="submit" class="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700">
+                                    <i class='bx bx-trash'></i>Hapus
                                 </button>
                             </form>
                         </td>
