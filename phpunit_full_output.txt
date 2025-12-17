@@ -1,0 +1,47 @@
+PHPUnit 11.5.46 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 8.2.12
+Configuration: C:\Users\AJI\back2me\phpunit.xml
+
+..EEE                                                               5 / 5 (100%)
+
+Time: 00:00.735, Memory: 42.00 MB
+
+Example (Tests\Feature\Example)
+ ✔ The application returns a successful response
+
+Example (Tests\Unit\Example)
+ ✔ That true is true
+
+Petugas Verify (Tests\Feature\PetugasVerify)
+ ✘ Petugas can update status
+   │
+   │ Symfony\Component\Routing\Exception\RouteNotFoundException: Route [back2me.reports.verify] not defined.
+   │
+   │ C:\Users\AJI\back2me\vendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php:526
+   │ C:\Users\AJI\back2me\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php:871
+   │ C:\Users\AJI\back2me\tests\Feature\PetugasVerifyTest.php:22
+   │
+
+Report Creation (Tests\Feature\ReportCreation)
+ ✘ User can create report
+   │
+   │ Symfony\Component\Routing\Exception\RouteNotFoundException: Route [back2me.reports.store] not defined.
+   │
+   │ C:\Users\AJI\back2me\vendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php:526
+   │ C:\Users\AJI\back2me\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php:871
+   │ C:\Users\AJI\back2me\tests\Feature\ReportCreationTest.php:20
+   │
+
+Role Protection (Tests\Feature\RoleProtection)
+ ✘ Only superadmin can access admin routes
+   │
+   │ Symfony\Component\Routing\Exception\RouteNotFoundException: Route [back2me.admin.users.index] not defined.
+   │
+   │ C:\Users\AJI\back2me\vendor\laravel\framework\src\Illuminate\Routing\UrlGenerator.php:526
+   │ C:\Users\AJI\back2me\vendor\laravel\framework\src\Illuminate\Foundation\helpers.php:871
+   │ C:\Users\AJI\back2me\tests\Feature\RoleProtectionTest.php:20
+   │
+
+ERRORS!
+Tests: 5, Assertions: 2, Errors: 3.
