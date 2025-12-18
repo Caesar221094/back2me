@@ -10,11 +10,13 @@ class Report extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id','category_id','judul','deskripsi','lokasi','foto','status','claimed_by','claimed_at','confirmed_by','confirmed_at'];
+    protected $fillable = ['user_id','category_id','judul','tipe','deskripsi','lokasi','foto','status','claimed_by','claimed_at','bukti_klaim','catatan_klaim','pelapor_approval','pelapor_approved_at','confirmed_by','confirmed_at'];
 
     protected $casts = [
         'foto' => 'array',
+        'bukti_klaim' => 'array',
         'claimed_at' => 'datetime',
+        'pelapor_approved_at' => 'datetime',
         'confirmed_at' => 'datetime',
     ];
 

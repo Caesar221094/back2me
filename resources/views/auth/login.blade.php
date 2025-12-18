@@ -2,6 +2,11 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    <div class="mb-6 text-center">
+        <h2 class="text-2xl font-bold text-slate-900">Masuk ke Back2Me</h2>
+        <p class="text-sm text-slate-600 mt-1">Sistem Lost & Found Kampus</p>
+    </div>
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -32,16 +37,34 @@
             </label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
+        <div class="mt-6">
+            <x-primary-button class="w-full justify-center">
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
+
+        <div class="flex items-center justify-between mt-4 text-sm">
+            @if (Route::has('password.request'))
+                <a class="text-indigo-600 hover:text-indigo-800 font-medium" href="{{ route('password.request') }}">
+                    <i class='bx bx-key'></i> {{ __('Lupa Password?') }}
+                </a>
+            @endif
+
+            @if (Route::has('register'))
+                <a class="text-indigo-600 hover:text-indigo-800 font-medium" href="{{ route('register') }}">
+                    <i class='bx bx-user-plus'></i> {{ __('Daftar Akun Baru') }}
+                </a>
+            @endif
+        </div>
     </form>
+
+    <!-- Testing Accounts Info -->
+    <div class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <p class="text-xs font-semibold text-blue-900 mb-2">🧪 Akun Testing:</p>
+        <div class="text-xs text-blue-800 space-y-1">
+            <div><strong>SuperAdmin:</strong> admin@back2me.test / password123</div>
+            <div><strong>Petugas:</strong> petugas@back2me.test / password123</div>
+            <div><strong>User:</strong> budi@back2me.test / password123</div>
+        </div>
+    </div>
 </x-guest-layout>

@@ -17,6 +17,10 @@ class ReportController extends Controller
             $query->where('judul','like',"%{$q}%")->orWhere('deskripsi','like',"%{$q}%");
         }
 
+        if ($tipe = $request->get('tipe')) {
+            $query->where('tipe', $tipe);
+        }
+
         if ($kategori = $request->get('category')) {
             $query->where('category_id', $kategori);
         }
@@ -42,13 +46,14 @@ class ReportController extends Controller
     {
         $request->validate([
             'judul' => 'required|string|max:255',
+            'tipe' => 'required|in:hilang,ditemukan',
             'category_id' => 'nullable|exists:categories,id',
             'deskripsi' => 'nullable|string',
             'lokasi' => 'nullable|string|max:255',
             'foto.*' => 'nullable|image|max:5120', // 5MB per file
         ]);
 
-        $data = $request->only(['judul','category_id','deskripsi','lokasi']);
+        $data = $request->only(['judul','tipe','category_id','deskripsi','lokasi']);
         $data['user_id'] = $request->user()->id;
 
         $files = $request->file('foto', []);
@@ -87,13 +92,14 @@ class ReportController extends Controller
 
         $request->validate([
             'judul' => 'required|string|max:255',
+            'tipe' => 'required|in:hilang,ditemukan',
             'category_id' => 'nullable|exists:categories,id',
             'deskripsi' => 'nullable|string',
             'lokasi' => 'nullable|string|max:255',
             'foto.*' => 'nullable|image|max:5120',
         ]);
 
-        $data = $request->only(['judul','category_id','deskripsi','lokasi']);
+        $data = $request->only(['judul','tipe','category_id','deskripsi','lokasi']);
 
         $files = $request->file('foto', []);
         $paths = $report->foto ?? [];
@@ -123,21 +129,89 @@ class ReportController extends Controller
             return redirect()->back()->with('error','Sudah ada klaim');
         }
 
+        // Validasi bukti kepemilikan
+        $request->validate([
+            'bukti.*' => 'required|image|max:5120',
+            'catatan_klaim' => 'required|string|min:20|max:500',
+        ], [
+            'bukti.*.required' => 'Upload minimal 1 foto bukti kepemilikan',
+            'catatan_klaim.required' => 'Catatan wajib diisi',
+            'catatan_klaim.min' => 'Catatan minimal 20 karakter (jelaskan ciri-ciri barang)',
+        ]);
+
+        // Upload bukti
+        $buktiPaths = [];
+        foreach ($request->file('bukti', []) as $file) {
+            $buktiPaths[] = $file->store('claims', 'public');
+        }
+
         $report->update([
             'claimed_by' => $request->user()->id,
             'claimed_at' => now(),
+            'bukti_klaim' => $buktiPaths,
+            'catatan_klaim' => $request->catatan_klaim,
+            'pelapor_approval' => 'pending',
             'status' => 'diproses',
         ]);
 
         // create notification for petugas (in-app)
         $request->user()->notify(new \App\Notifications\ReportClaimed($report));
 
-        return redirect()->back()->with('success','Klaim terkirim, menunggu verifikasi petugas');
+        return redirect()->back()->with('success','Klaim terkirim dengan bukti kepemilikan. Menunggu approval dari pelapor');
+    }
+
+    // Pelapor approve klaim
+    public function approveClaim(Request $request, Report $report)
+    {
+        if ($report->user_id !== $request->user()->id) {
+            return redirect()->back()->with('error', 'Anda bukan pelapor laporan ini');
+        }
+
+        if ($report->pelapor_approval !== 'pending') {
+            return redirect()->back()->with('error', 'Klaim sudah diproses');
+        }
+
+        $report->update([
+            'pelapor_approval' => 'approved',
+            'pelapor_approved_at' => now(),
+        ]);
+
+        // Notify petugas untuk verifikasi
+        return redirect()->back()->with('success', 'Klaim disetujui. Menunggu verifikasi petugas');
+    }
+
+    // Pelapor reject klaim
+    public function rejectClaim(Request $request, Report $report)
+    {
+        if ($report->user_id !== $request->user()->id) {
+            return redirect()->back()->with('error', 'Anda bukan pelapor laporan ini');
+        }
+
+        if ($report->pelapor_approval !== 'pending') {
+            return redirect()->back()->with('error', 'Klaim sudah diproses');
+        }
+
+        $report->update([
+            'pelapor_approval' => 'rejected',
+            'pelapor_approved_at' => now(),
+            'status' => 'pending',
+            'claimed_by' => null,
+            'claimed_at' => null,
+            'bukti_klaim' => null,
+            'catatan_klaim' => null,
+        ]);
+
+        return redirect()->back()->with('success', 'Klaim ditolak. Laporan kembali terbuka');
     }
 
     // Petugas verifikasi / ubah status
     public function verify(Request $request, Report $report)
     {
+        // Petugas hanya bisa verify jika pelapor sudah approve
+        if ($report->pelapor_approval !== 'approved') {
+            return redirect()->back()->with('error', 'Pelapor belum menyetujui klaim ini');
+        }
+
         $request->validate(['status' => 'required|in:diproses,selesai,ditolak']);
 
         $report->update(['status' => $request->status]);

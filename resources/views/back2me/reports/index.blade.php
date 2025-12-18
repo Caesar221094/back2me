@@ -15,10 +15,18 @@
         </a>
     </div>
 
-    <form method="get" class="grid gap-3 md:grid-cols-4 bg-indigo-50/60 border border-indigo-100 rounded-xl p-4">
+    <form method="get" class="grid gap-3 md:grid-cols-5 bg-indigo-50/60 border border-indigo-100 rounded-xl p-4">
         <div class="md:col-span-2">
             <label class="text-xs font-semibold text-slate-600">Kata kunci</label>
             <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari judul atau deskripsi" class="mt-1 w-full rounded-lg border-slate-200 focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+        <div>
+            <label class="text-xs font-semibold text-slate-600">Tipe</label>
+            <select name="tipe" class="mt-1 w-full rounded-lg border-slate-200 focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="">Semua</option>
+                <option value="hilang" {{ request('tipe')=='hilang'?'selected':'' }}>Hilang</option>
+                <option value="ditemukan" {{ request('tipe')=='ditemukan'?'selected':'' }}>Ditemukan</option>
+            </select>
         </div>
         <div>
             <label class="text-xs font-semibold text-slate-600">Kategori</label>
@@ -39,7 +47,7 @@
                 <option value="ditolak" {{ request('status')=='ditolak'?'selected':'' }}>Ditolak</option>
             </select>
         </div>
-        <div class="md:col-span-4 flex gap-3">
+        <div class="md:col-span-5 flex gap-3">
             <button class="btn-primary" type="submit"><i class='bx bx-search'></i> Filter</button>
             <a href="{{ route('back2me.reports.index') }}" class="btn-ghost">Reset</a>
         </div>
@@ -49,7 +57,18 @@
         @forelse($reports as $r)
             <a href="{{ route('back2me.reports.show', $r) }}" class="card card-hover p-4 flex items-start justify-between">
                 <div class="space-y-1">
-                    <p class="text-xs uppercase tracking-wide text-slate-500">#{{ $r->id }}</p>
+                    <div class="flex items-center gap-2">
+                        <p class="text-xs uppercase tracking-wide text-slate-500">#{{ $r->id }}</p>
+                        @if($r->tipe === 'hilang')
+                            <span class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-800">
+                                <i class='bx bx-search'></i>Hilang
+                            </span>
+                        @else
+                            <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-800">
+                                <i class='bx bx-check-circle'></i>Ditemukan
+                            </span>
+                        @endif
+                    </div>
                     <p class="text-base font-semibold text-slate-900">{{ $r->judul }}</p>
                     <p class="text-sm text-slate-600 line-clamp-2">{{ $r->deskripsi }}</p>
                     <div class="flex flex-wrap gap-2 text-xs text-slate-600">

@@ -22,8 +22,32 @@
                 @csrf
 
                 <div class="space-y-2">
-                    <label class="text-sm font-semibold text-slate-700">Judul Laporan</label>
-                    <input name="judul" value="{{ old('judul') }}" required class="w-full rounded-lg border-slate-200 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Contoh: Dompet coklat hilang di parkiran kampus">
+                    <label class="text-sm font-semibold text-slate-700">Tipe Laporan <span class="text-red-500">*</span></label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="tipe" value="hilang" {{ old('tipe', 'hilang') == 'hilang' ? 'checked' : '' }} class="text-indigo-600 focus:ring-indigo-500" required>
+                            <span class="text-sm text-slate-700">
+                                <i class='bx bx-search text-amber-600'></i>Barang Hilang
+                            </span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="tipe" value="ditemukan" {{ old('tipe') == 'ditemukan' ? 'checked' : '' }} class="text-indigo-600 focus:ring-indigo-500" required>
+                            <span class="text-sm text-slate-700">
+                                <i class='bx bx-check-circle text-green-600'></i>Barang Ditemukan
+                            </span>
+                        </label>
+                    </div>
+                    @error('tipe')
+                        <p class="text-xs text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-sm font-semibold text-slate-700">Judul Laporan <span class="text-red-500">*</span></label>
+                    <input name="judul" value="{{ old('judul') }}" required class="w-full rounded-lg border-slate-200 focus:ring-indigo-500 focus:border-indigo-500 @error('judul') border-red-300 @enderror" placeholder="Contoh: Dompet coklat hilang di parkiran kampus">
+                    @error('judul')
+                        <p class="text-xs text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="grid gap-4 md:grid-cols-2">

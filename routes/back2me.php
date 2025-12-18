@@ -21,6 +21,10 @@ Route::middleware(['auth'])->group(function () {
     // claim a report (user)
     Route::post('/back2me/reports/{report}/claim', [ReportController::class,'claim'])->name('back2me.reports.claim');
 
+    // approve/reject claim (pelapor)
+    Route::post('/back2me/reports/{report}/approve-claim', [ReportController::class,'approveClaim'])->name('back2me.reports.approve_claim');
+    Route::post('/back2me/reports/{report}/reject-claim', [ReportController::class,'rejectClaim'])->name('back2me.reports.reject_claim');
+
     // confirm receipt (user)
     Route::post('/back2me/reports/{report}/confirm', [ReportController::class,'confirmReceipt'])->name('back2me.reports.confirm');
 
