@@ -38,12 +38,22 @@ class ReportController extends Controller
 
     public function create()
     {
+        // Petugas tidak boleh membuat laporan
+        if (auth()->user()->role === 'petugas') {
+            abort(403, 'Petugas tidak diizinkan membuat laporan');
+        }
+
         $categories = Category::orderBy('nama')->get();
         return view('back2me.reports.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
+        // Petugas tidak boleh membuat laporan
+        if (auth()->user()->role === 'petugas') {
+            abort(403, 'Petugas tidak diizinkan membuat laporan');
+        }
+
         $request->validate([
             'judul' => 'required|string|max:255',
             'tipe' => 'required|in:hilang,ditemukan',
@@ -76,6 +86,16 @@ class ReportController extends Controller
 
     public function edit(Report $report)
     {
+        // Petugas tidak bisa edit laporan
+        if (auth()->user()->role === 'petugas') {
+            abort(403, 'Petugas tidak diizinkan mengedit laporan');
+        }
+
+        // Hanya pemilik yang bisa edit
+        if ($report->user_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit laporan ini');
+        }
+
         if ($report->status !== 'pending') {
             return redirect()->back()->with('error','Tidak dapat edit setelah diverifikasi');
         }
@@ -86,6 +106,16 @@ class ReportController extends Controller
 
     public function update(Request $request, Report $report)
     {
+        // Petugas tidak bisa update laporan
+        if (auth()->user()->role === 'petugas') {
+            abort(403, 'Petugas tidak diizinkan mengedit laporan');
+        }
+
+        // Hanya pemilik yang bisa update
+        if ($report->user_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit laporan ini');
+        }
+
         if ($report->status !== 'pending') {
             return redirect()->back()->with('error','Tidak dapat edit setelah diverifikasi');
         }
@@ -171,13 +201,15 @@ class ReportController extends Controller
             return redirect()->back()->with('error', 'Klaim sudah diproses');
         }
 
+        // SIMPLIFIED WORKFLOW: Langsung selesai setelah pelapor approve
         $report->update([
             'pelapor_approval' => 'approved',
             'pelapor_approved_at' => now(),
+            'status' => 'selesai', // Langsung selesai, tidak perlu tunggu petugas
         ]);
 
-        // Notify petugas untuk verifikasi
-        return redirect()->back()->with('success', 'Klaim disetujui. Menunggu verifikasi petugas');
+        // Notify pengklaim bahwa klaim disetujui
+        return redirect()->back()->with('success', 'Klaim disetujui! Silakan hubungi penemu untuk koordinasi pengambilan barang.');
     }
 
     // Pelapor reject klaim
@@ -204,19 +236,19 @@ class ReportController extends Controller
         return redirect()->back()->with('success', 'Klaim ditolak. Laporan kembali terbuka');
     }
 
-    // Petugas verifikasi / ubah status
+    // Petugas verifikasi / ubah status (OPTIONAL - untuk moderasi abuse/fraud)
     public function verify(Request $request, Report $report)
     {
-        // Petugas hanya bisa verify jika pelapor sudah approve
-        if ($report->pelapor_approval !== 'approved') {
-            return redirect()->back()->with('error', 'Pelapor belum menyetujui klaim ini');
-        }
+        // Petugas bisa paksa ubah status jika ada fraud/abuse
+        $request->validate(['status' => 'required|in:pending,diproses,selesai,ditolak']);
 
-        $request->validate(['status' => 'required|in:diproses,selesai,ditolak']);
-
+        $oldStatus = $report->status;
         $report->update(['status' => $request->status]);
 
-        return redirect()->back()->with('success','Status diperbarui');
+        // Log perubahan untuk audit
+        $message = "Status diubah dari {$oldStatus} ke {$request->status} oleh petugas";
+        
+        return redirect()->back()->with('success', $message);
     }
 
     // User konfirmasi penerimaan barang

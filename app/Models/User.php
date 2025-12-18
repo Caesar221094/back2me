@@ -23,6 +23,8 @@ class User extends Authenticatable
         'password',
         'role',
         'is_banned',
+        'phone',
+        'whatsapp',
     ];
 
     /**
@@ -46,5 +48,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the reports created by this user.
+     */
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
     }
 }

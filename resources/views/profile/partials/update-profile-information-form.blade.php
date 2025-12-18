@@ -47,6 +47,20 @@
             @endif
         </div>
 
+        <div>
+            <x-input-label for="phone" value="Nomor Telepon (Optional)" />
+            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" placeholder="0812-3456-7890" autocomplete="tel" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+            <p class="mt-1 text-xs text-gray-600">Untuk koordinasi pengambilan barang</p>
+        </div>
+
+        <div>
+            <x-input-label for="whatsapp" value="WhatsApp (Optional)" />
+            <x-text-input id="whatsapp" name="whatsapp" type="text" class="mt-1 block w-full" :value="old('whatsapp', $user->whatsapp)" placeholder="628123456789 atau 0812-3456-7890" />
+            <x-input-error class="mt-2" :messages="$errors->get('whatsapp')" />
+            <p class="mt-1 text-xs text-gray-600">Format: 628xxx atau 08xxx</p>
+        </div>
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 

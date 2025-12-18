@@ -4,11 +4,119 @@
 
 @layer base {
 	body {
-		@apply bg-gradient-to-b from-slate-100 via-slate-50 to-white text-slate-800;
+		@apply bg-slate-50 text-slate-800;
 	}
 }
 
 @layer components {
+	/* Sneat Layout Structure */
+	.layout-wrapper {
+		@apply min-h-screen flex flex-col;
+	}
+	
+	.layout-container {
+		@apply flex flex-1;
+	}
+	
+	.layout-menu {
+		@apply fixed top-0 bottom-0 left-0 z-40 w-64 bg-white border-r border-slate-200 transition-transform duration-300 overflow-y-auto;
+	}
+	
+	@media (max-width: 1280px) {
+		.layout-menu:not(.closed) {
+			@apply translate-x-0;
+		}
+		.layout-menu.closed {
+			@apply -translate-x-full;
+		}
+	}
+	
+	@media (min-width: 1280px) {
+		.layout-menu {
+			@apply translate-x-0;
+		}
+	}
+	
+	.layout-page {
+		@apply flex-1 flex flex-col;
+		margin-left: 0;
+	}
+	
+	@media (min-width: 1280px) {
+		.layout-page {
+			margin-left: 16rem; /* 256px / 64 = w-64 */
+		}
+	}
+	
+	.layout-navbar {
+		@apply sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm;
+	}
+	
+	.layout-navbar .relative {
+		@apply z-50;
+	}
+	
+	.content-wrapper {
+		@apply flex-1 flex flex-col bg-slate-50;
+	}
+	
+	.container-xxl {
+		@apply w-full mx-auto px-4;
+		max-width: 1440px;
+	}
+	
+	.container-p-y {
+		@apply py-6;
+	}
+	
+	.layout-overlay {
+		@apply fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-30;
+	}
+	
+	@media (min-width: 1280px) {
+		.layout-overlay {
+			@apply hidden;
+		}
+	}
+
+	/* Menu Styles */
+	.menu {
+		@apply flex flex-col;
+	}
+	
+	.menu-inner {
+		@apply list-none m-0 p-0;
+	}
+	
+	.menu-item {
+		@apply relative;
+	}
+	
+	.menu-link {
+		@apply flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-700 transition-all duration-150 hover:bg-indigo-50 hover:text-indigo-700;
+	}
+	
+	.menu-item.active .menu-link {
+		@apply bg-indigo-100 text-indigo-700 shadow-sm;
+	}
+	
+	.menu-icon {
+		@apply text-lg flex-shrink-0;
+	}
+	
+	.menu-header {
+		@apply px-4 py-2 mt-4 mb-1 text-xs font-semibold text-slate-500 uppercase tracking-wider;
+	}
+	
+	.app-brand {
+		@apply border-b border-slate-100 flex items-center;
+	}
+	
+	.app-brand-link {
+		@apply flex items-center gap-3 no-underline;
+	}
+
+	/* Other Components */
 	.glass-nav {
 		@apply bg-white/90 backdrop-blur shadow-lg border border-slate-200/80 px-4 sm:px-6 lg:px-8 py-3 rounded-none;
 	}
@@ -43,5 +151,10 @@
 
 	.nav-link {
 		@apply inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold text-slate-700 rounded-lg transition hover:bg-indigo-50 hover:text-indigo-700;
+	}
+	
+	/* Footer */
+	.content-footer {
+		@apply border-t border-slate-200 bg-white py-3 text-xs text-slate-600;
 	}
 }

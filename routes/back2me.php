@@ -3,8 +3,6 @@
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\SettingsController;
-use App\Http\Controllers\Admin\ReportExportController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {

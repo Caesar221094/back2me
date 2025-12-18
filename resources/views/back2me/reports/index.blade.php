@@ -10,9 +10,11 @@
             <h3 class="text-lg font-semibold text-slate-900">Semua Laporan</h3>
             <p class="text-sm text-slate-600">Gunakan filter untuk mempersempit pencarian.</p>
         </div>
-        <a href="{{ route('back2me.reports.create') }}" class="btn-primary">
-            <i class='bx bxs-plus-circle'></i> Buat Laporan
-        </a>
+        @if(auth()->user()->role !== 'petugas')
+            <a href="{{ route('back2me.reports.create') }}" class="btn-primary">
+                <i class='bx bxs-plus-circle'></i> Buat Laporan
+            </a>
+        @endif
     </div>
 
     <form method="get" class="grid gap-3 md:grid-cols-5 bg-indigo-50/60 border border-indigo-100 rounded-xl p-4">
@@ -55,33 +57,97 @@
 
     <div class="grid gap-3">
         @forelse($reports as $r)
-            <a href="{{ route('back2me.reports.show', $r) }}" class="card card-hover p-4 flex items-start justify-between">
-                <div class="space-y-1">
-                    <div class="flex items-center gap-2">
-                        <p class="text-xs uppercase tracking-wide text-slate-500">#{{ $r->id }}</p>
-                        @if($r->tipe === 'hilang')
-                            <span class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-800">
-                                <i class='bx bx-search'></i>Hilang
+            <a href="{{ route('back2me.reports.show', $r) }}" class="card card-hover p-5 block">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex-1 space-y-3">
+                        <!-- Header with ID, Type, Status -->
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <p class="text-xs uppercase tracking-wide text-slate-500 font-semibold">#{{ $r->id }}</p>
+                            @if($r->tipe === 'hilang')
+                                <span class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800">
+                                    <i class='bx bx-search'></i>Hilang
+                                </span>
+                            @else
+                                <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-800">
+                                    <i class='bx bx-check-circle'></i>Ditemukan
+                                </span>
+                            @endif
+                            
+                            <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold
+                                @if($r->status === 'pending') bg-amber-50 text-amber-700 border border-amber-200
+                                @elseif($r->status === 'diproses') bg-blue-50 text-blue-700 border border-blue-200
+                                @elseif($r->status === 'selesai') bg-emerald-50 text-emerald-700 border border-emerald-200
+                                @else bg-rose-50 text-rose-700 border border-rose-200 @endif">
+                                {{ ucfirst($r->status) }}
                             </span>
-                        @else
-                            <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-800">
-                                <i class='bx bx-check-circle'></i>Ditemukan
-                            </span>
-                        @endif
+                        </div>
+                        
+                        <!-- Title & Description -->
+                        <div class="space-y-1">
+                            <p class="text-base font-semibold text-slate-900">{{ $r->judul }}</p>
+                            <p class="text-sm text-slate-600 line-clamp-2">{{ $r->deskripsi }}</p>
+                        </div>
+                        
+                        <!-- People Info & Category -->
+                        <div class="flex flex-wrap gap-3 text-xs">
+                            <!-- Pelapor (siapa yang buat laporan) -->
+                            <div class="flex items-center gap-1.5 text-slate-600">
+                                <i class='bx bxs-user-circle text-base text-indigo-600'></i>
+                                <span class="font-medium">
+                                    @if($r->tipe === 'hilang')
+                                        Pemilik:
+                                    @else
+                                        Penemu:
+                                    @endif
+                                </span>
+                                <span class="font-semibold text-slate-800">{{ $r->user->name }}</span>
+                            </div>
+                            
+                            <!-- Responden (siapa yang merespon/klaim) -->
+                            @if($r->claimed_by)
+                                @php
+                                    $responden = \App\Models\User::find($r->claimed_by);
+                                @endphp
+                                <div class="flex items-center gap-1.5 text-blue-700">
+                                    <i class='bx bxs-hand text-base'></i>
+                                    <span class="font-medium">
+                                        @if($r->tipe === 'hilang')
+                                            Penemu:
+                                        @else
+                                            Pemilik:
+                                        @endif
+                                    </span>
+                                    <span class="font-semibold">{{ $responden?->name ?? 'User' }}</span>
+                                </div>
+                            @endif
+                            
+                            <!-- Category -->
+                            @if($r->category)
+                                <div class="flex items-center gap-1.5 text-slate-600">
+                                    <i class='bx bx-folder text-base text-slate-500'></i>
+                                    <span>{{ $r->category->nama }}</span>
+                                </div>
+                            @endif
+                            
+                            <!-- Location -->
+                            @if($r->lokasi)
+                                <div class="flex items-center gap-1.5 text-slate-600">
+                                    <i class='bx bx-map text-base text-slate-500'></i>
+                                    <span>{{ Str::limit($r->lokasi, 30) }}</span>
+                                </div>
+                            @endif
+                            
+                            <!-- Created Time -->
+                            <div class="flex items-center gap-1.5 text-slate-500">
+                                <i class='bx bx-time-five text-base'></i>
+                                <span>{{ $r->created_at->diffForHumans() }}</span>
+                            </div>
+                        </div>
                     </div>
-                    <p class="text-base font-semibold text-slate-900">{{ $r->judul }}</p>
-                    <p class="text-sm text-slate-600 line-clamp-2">{{ $r->deskripsi }}</p>
-                    <div class="flex flex-wrap gap-2 text-xs text-slate-600">
-                        @if($r->category)
-                            <span class="badge-soft">{{ $r->category->nama }}</span>
-                        @endif
-                        <span class="badge-soft">Status: {{ ucfirst($r->status) }}</span>
-                        @if($r->claimed_by)
-                            <span class="badge-soft bg-blue-100 text-blue-800">Diklaim: {{ \App\Models\User::find($r->claimed_by)?->name ?? 'User' }}</span>
-                        @endif
-                    </div>
+                    
+                    <!-- Arrow Icon -->
+                    <i class='bx bx-chevron-right text-2xl text-slate-400 flex-shrink-0'></i>
                 </div>
-                <i class='bx bx-chevron-right text-2xl text-slate-400'></i>
             </a>
         @empty
             <div class="text-center text-slate-600 py-6">Belum ada laporan.</div>

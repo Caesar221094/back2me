@@ -35,6 +35,8 @@ class Back2MeSeeder extends Seeder
             'email' => 'budi@back2me.test',
             'role' => 'user',
             'password' => Hash::make('password123'),
+            'phone' => '0812-3456-7890',
+            'whatsapp' => '6281234567890',
         ]);
 
         $user2 = User::factory()->create([
@@ -42,6 +44,8 @@ class Back2MeSeeder extends Seeder
             'email' => 'siti@back2me.test',
             'role' => 'user',
             'password' => Hash::make('password123'),
+            'phone' => '0821-9876-5432',
+            'whatsapp' => '6282198765432',
         ]);
 
         $user3 = User::factory()->create([
@@ -49,6 +53,8 @@ class Back2MeSeeder extends Seeder
             'email' => 'andi@back2me.test',
             'role' => 'user',
             'password' => Hash::make('password123'),
+            'phone' => '0813-5555-6666',
+            'whatsapp' => '6281355556666',
         ]);
 
         $user4 = User::factory()->create([
@@ -56,6 +62,8 @@ class Back2MeSeeder extends Seeder
             'email' => 'dewi@back2me.test',
             'role' => 'user',
             'password' => Hash::make('password123'),
+            'phone' => '0856-7777-8888',
+            'whatsapp' => '6285677778888',
         ]);
 
         $user5 = User::factory()->create([
@@ -63,6 +71,8 @@ class Back2MeSeeder extends Seeder
             'email' => 'rudi@back2me.test',
             'role' => 'user',
             'password' => Hash::make('password123'),
+            'phone' => '0877-9999-0000',
+            'whatsapp' => '6287799990000',
         ]);
 
         // ===== CATEGORIES =====
