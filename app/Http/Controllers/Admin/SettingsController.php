@@ -11,10 +11,10 @@ class SettingsController extends Controller
     public function index()
     {
         $settings = [
-            'max_upload_size' => config('back2me.max_upload_size', 5120), // KB
-            'max_upload_files' => config('back2me.max_upload_files', 5),
-            'claim_timeout_days' => config('back2me.claim_timeout_days', 30),
-            'auto_close_days' => config('back2me.auto_close_days', 90),
+            'max_upload_size' => Cache::get('back2me.max_upload_size', 5120), // KB
+            'max_upload_files' => Cache::get('back2me.max_upload_files', 5),
+            'claim_timeout_days' => Cache::get('back2me.claim_timeout_days', 30),
+            'auto_close_days' => Cache::get('back2me.auto_close_days', 90),
         ];
 
         return view('back2me.admin.settings.index', compact('settings'));

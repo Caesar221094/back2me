@@ -155,6 +155,11 @@ class ReportController extends Controller
             return redirect()->back()->with('error', 'Anda tidak dapat mengklaim laporan yang Anda buat sendiri');
         }
 
+        // Cek apakah laporan sudah expired
+        if ($report->status === 'expired') {
+            return redirect()->back()->with('error', 'Laporan ini sudah expired dan tidak dapat diklaim');
+        }
+
         if ($report->claimed_by) {
             return redirect()->back()->with('error','Sudah ada klaim');
         }
@@ -240,7 +245,7 @@ class ReportController extends Controller
     public function verify(Request $request, Report $report)
     {
         // Petugas bisa paksa ubah status jika ada fraud/abuse
-        $request->validate(['status' => 'required|in:pending,diproses,selesai,ditolak']);
+        $request->validate(['status' => 'required|in:pending,diproses,selesai,ditolak,expired']);
 
         $oldStatus = $report->status;
         $report->update(['status' => $request->status]);

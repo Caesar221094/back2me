@@ -65,6 +65,7 @@
             <div><strong>SuperAdmin:</strong> admin@back2me.test / password123</div>
             <div><strong>Petugas:</strong> petugas@back2me.test / password123</div>
             <div><strong>User:</strong> budi@back2me.test / password123</div>
+            <div><strong>User:</strong> siti@back2me.test / password123</div>
         </div>
     </div>
 </x-guest-layout>

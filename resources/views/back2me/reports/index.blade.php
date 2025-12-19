@@ -47,6 +47,7 @@
                 <option value="diproses" {{ request('status')=='diproses'?'selected':'' }}>Diproses</option>
                 <option value="selesai" {{ request('status')=='selesai'?'selected':'' }}>Selesai</option>
                 <option value="ditolak" {{ request('status')=='ditolak'?'selected':'' }}>Ditolak</option>
+                <option value="expired" {{ request('status')=='expired'?'selected':'' }}>Expired</option>
             </select>
         </div>
         <div class="md:col-span-5 flex gap-3">
@@ -77,6 +78,7 @@
                                 @if($r->status === 'pending') bg-amber-50 text-amber-700 border border-amber-200
                                 @elseif($r->status === 'diproses') bg-blue-50 text-blue-700 border border-blue-200
                                 @elseif($r->status === 'selesai') bg-emerald-50 text-emerald-700 border border-emerald-200
+                                @elseif($r->status === 'expired') bg-slate-50 text-slate-700 border border-slate-200
                                 @else bg-rose-50 text-rose-700 border border-rose-200 @endif">
                                 {{ ucfirst($r->status) }}
                             </span>

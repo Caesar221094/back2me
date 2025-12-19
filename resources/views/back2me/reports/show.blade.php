@@ -16,6 +16,13 @@
                 @elseif($report->status === 'selesai') bg-emerald-100 text-emerald-800
                 @else bg-rose-100 text-rose-700 @endif">
                 <i class='bx bxs-circle-three-quarter'></i>{{ ucfirst($report->status) }}</span>
+            
+            @if($report->pelapor_approval === 'pending')
+            <span class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800 animate-pulse">
+                <i class='bx bx-time-five'></i>Menunggu Approval Pelapor
+            </span>
+            @endif
+
             @if($report->category)
             <span class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
                 <i class='bx bx-folder'></i>{{ $report->category->nama }}
@@ -306,10 +313,8 @@
                 <div class="space-y-1 text-sm">
                     <label class="text-slate-700 font-semibold">Paksa ubah status</label>
                     <select name="status" class="w-full rounded-lg border-slate-200 focus:ring-indigo-500 focus:border-indigo-500">
-                        <option value="pending" {{ $report->status=='pending'?'selected':'' }}>Pending</option>
-                        <option value="diproses" {{ $report->status=='diproses'?'selected':'' }}>Diproses</option>
-                        <option value="selesai" {{ $report->status=='selesai'?'selected':'' }}>Selesai</option>
                         <option value="ditolak" {{ $report->status=='ditolak'?'selected':'' }}>Ditolak (Fraud/Abuse)</option>
+                        <option value="expired" {{ $report->status=='expired'?'selected':'' }}>Expired</option>
                     </select>
                 </div>
                 <button type="submit" class="btn-secondary w-full inline-flex items-center justify-center gap-2">

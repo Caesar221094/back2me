@@ -19,10 +19,14 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <div class="card card-hover p-4">
-                    <p class="text-sm text-slate-500">Total Laporan</p>
+                    <p class="text-sm text-slate-500">
+                        @if($role === 'user') Laporan Saya @else Total Laporan @endif
+                    </p>
                     <div class="flex items-end justify-between">
                         <p class="text-2xl font-bold text-slate-900">{{ $stats['total'] }}</p>
-                        <span class="text-indigo-600 text-sm font-semibold">Semua</span>
+                        <span class="text-indigo-600 text-sm font-semibold">
+                            @if($role === 'user') Milik Saya @else Semua @endif
+                        </span>
                     </div>
                 </div>
                 <div class="card card-hover p-4">
@@ -33,7 +37,9 @@
                     </div>
                 </div>
                 <div class="card card-hover p-4">
-                    <p class="text-sm text-slate-500">Diproses</p>
+                    <p class="text-sm text-slate-500">
+                        @if($role === 'user') Diproses @else Diproses @endif
+                    </p>
                     <div class="flex items-end justify-between">
                         <p class="text-2xl font-bold text-blue-700">{{ $stats['diproses'] }}</p>
                         <span class="text-blue-700 text-sm font-semibold">On progress</span>
@@ -54,12 +60,37 @@
                     </div>
                 </div>
                 <div class="card card-hover p-4">
-                    <p class="text-sm text-slate-500">Sudah Diklaim</p>
+                    <p class="text-sm text-slate-500">
+                        @if($role === 'user') Item yang Saya Klaim @else Sudah Diklaim @endif
+                    </p>
                     <div class="flex items-end justify-between">
-                        <p class="text-2xl font-bold text-blue-800">{{ $stats['claimed'] }}</p>
+                        <p class="text-2xl font-bold text-blue-800">
+                            @if($role === 'user')
+                                {{ $stats['claimed_by_me'] ?? 0 }}
+                            @else
+                                {{ $stats['claimed'] }}
+                            @endif
+                        </p>
                         <span class="text-blue-800 text-sm font-semibold">Claimed</span>
                     </div>
                 </div>
+
+                @if($role === 'superadmin' && isset($stats['total_users']))
+                    <div class="card card-hover p-4">
+                        <p class="text-sm text-slate-500">Total Pengguna</p>
+                        <div class="flex items-end justify-between">
+                            <p class="text-2xl font-bold text-indigo-700">{{ $stats['total_users'] }}</p>
+                            <span class="text-indigo-700 text-sm font-semibold">Users</span>
+                        </div>
+                    </div>
+                    <div class="card card-hover p-4">
+                        <p class="text-sm text-slate-500">Pengguna Dibanned</p>
+                        <div class="flex items-end justify-between">
+                            <p class="text-2xl font-bold text-rose-700">{{ $stats['banned_users'] }}</p>
+                            <span class="text-rose-700 text-sm font-semibold">Banned</span>
+                        </div>
+                    </div>
+                @endif
             </div>
 
             <div class="grid gap-6 lg:grid-cols-3">
@@ -67,9 +98,19 @@
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
                             <h3 class="text-lg font-semibold text-slate-900">Aktivitas Terbaru</h3>
-                            <p class="text-sm text-slate-600">5 laporan terakhir masuk sistem.</p>
+                            <p class="text-sm text-slate-600">
+                                @if($role === 'user')
+                                    Laporan yang Anda buat atau klaim.
+                                @else
+                                    5 laporan terakhir masuk sistem.
+                                @endif
+                            </p>
                         </div>
-                        <a class="btn-primary" href="{{ route('back2me.reports.create') }}"><i class='bx bx-plus-circle'></i> Buat laporan</a>
+                        @if($role !== 'petugas')
+                            <a class="btn-primary" href="{{ route('back2me.reports.create') }}">
+                                <i class='bx bx-plus-circle'></i> Buat laporan
+                            </a>
+                        @endif
                     </div>
                     <div class="divide-y divide-slate-100">
                         @forelse($recentReports as $r)
