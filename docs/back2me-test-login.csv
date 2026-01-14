@@ -1,0 +1,3 @@
+No,Kasus Pengujian,Hasil yang Diharapkan,Hasil yang Diperoleh,Keterangan
+"1.",User login dengan email dan password yang benar,User berhasil login dan diarahkan ke halaman dashboard Back2Me,Sistem berhasil login dan masuk ke halaman dashboard,Berhasil
+"2.",User login dengan email atau password yang salah,Sistem menolak login dan menampilkan pesan kesalahan pada form login,Sistem menolak login dan menampilkan pesan kesalahan kredensial,Berhasil

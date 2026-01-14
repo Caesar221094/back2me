@@ -1,0 +1,6 @@
+No,Kasus Pengujian,Hasil yang Diharapkan,Hasil yang Diperoleh,Keterangan
+"1.",User login dengan email dan password yang benar,User berhasil login dan diarahkan ke halaman dashboard Back2Me,Sistem berhasil login dan masuk ke halaman dashboard,Berhasil
+"2.",User login dengan email atau password yang salah,Sistem menolak login dan menampilkan pesan kesalahan pada form login,Sistem menolak login dan menampilkan pesan kesalahan kredensial,Berhasil
+"3.",User mengisi semua field laporan dengan benar,Laporan tersimpan di database dan tampil di daftar laporan dengan status "pending",Laporan tersimpan dan muncul di daftar laporan,Berhasil
+"4.",User tidak mengisi field wajib pada form laporan (misalnya judul atau tipe dikosongkan),Sistem menolak penyimpanan dan menampilkan pesan validasi pada field yang wajib diisi,Form laporan tidak tersimpan dan pesan validasi tampil di field terkait,Berhasil
+"5.",User mengupload foto laporan melebihi batas (ukuran > 5MB per file atau jumlah foto > 5),Sistem menolak upload dan menampilkan pesan kesalahan terkait batas ukuran/jumlah file,Sistem menolak upload dan menampilkan pesan kesalahan,Berhasil

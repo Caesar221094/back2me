@@ -1,0 +1,61 @@
+@startuml
+scale 2300x1500
+left to right direction
+
+' Bikin use case berbentuk persegi (bukan oval) supaya hemat ruang
+skinparam usecase {
+  RoundCorner 0
+}
+
+' Garis dibuat ortogonal supaya tidak terlalu melengkung panjang
+skinparam linetype ortho
+
+rectangle "Back2Me" as SYS {
+
+  rectangle "Akun" as RAccount {
+    usecase "Registrasi" as UC_Register
+    usecase "Log in" as UC_Login
+    usecase "Kelola Profil" as UC_Profile
+  }
+
+  rectangle "Laporan & Klaim" as RReport {
+    usecase "Buat Laporan" as UC_CreateReport
+    usecase "Kelola Laporan" as UC_ManageReports
+    usecase "Klaim Barang" as UC_Claim
+    usecase "Kelola Klaim" as UC_ManageClaims
+    usecase "Lihat Notifikasi" as UC_Notifications
+  }
+
+  rectangle "Admin" as RAdmin {
+    usecase "Kelola User" as UC_ManageUsers
+    usecase "Kelola Kategori" as UC_ManageCategories
+    usecase "Pengaturan Sistem" as UC_Settings
+    usecase "Export Laporan" as UC_Export
+    usecase "Kelola Status Laporan" as UC_Verify
+  }
+}
+
+actor "SuperAdmin" as SA
+actor "User" as US
+actor "Petugas" as PT
+
+SYS -[hidden]- SA
+SA -[hidden]- US
+US -[hidden]- PT
+
+RAccount -[hidden]- RReport
+RReport -[hidden]- RAdmin
+
+' --- Relasi aktor ke blok fungsi ---
+PT -- RAccount
+PT -- RReport
+
+US -- RAccount
+US -- RReport
+
+SA -- RAccount
+SA -- RReport
+SA -- RAdmin
+
+' --- Relasi <<include>> ---
+@enduml

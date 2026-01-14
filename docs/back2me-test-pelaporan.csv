@@ -1,0 +1,4 @@
+No,Kasus Pengujian,Hasil yang Diharapkan,Hasil yang Diperoleh,Keterangan
+"1.",User mengisi semua field laporan dengan benar,Laporan tersimpan di database dan tampil di daftar laporan dengan status "pending",Laporan tersimpan dan muncul di daftar laporan,Berhasil
+"2.",User tidak mengisi field wajib pada form laporan (misalnya judul atau tipe dikosongkan),Sistem menolak penyimpanan dan menampilkan pesan validasi pada field yang wajib diisi,Form laporan tidak tersimpan dan pesan validasi tampil di field terkait,Berhasil
+"3.",User mengupload foto laporan melebihi batas (ukuran > 5MB per file atau jumlah foto > 5),Sistem menolak upload dan menampilkan pesan kesalahan terkait batas ukuran/jumlah file,Sistem menolak upload dan menampilkan pesan kesalahan,Berhasil

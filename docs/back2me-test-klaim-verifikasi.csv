@@ -1,0 +1,5 @@
+No,Kasus Pengujian,Hasil yang Diharapkan,Hasil yang Diperoleh,Keterangan
+"1.",User (bukan pelapor) mengajukan klaim dengan mengisi catatan klaim dan upload bukti foto,Sistem menyimpan data klaim, mengubah status laporan menjadi "diproses", dan mencatat notifikasi klaim,Klaim tersimpan, status laporan menjadi "diproses", notifikasi klaim tercatat,Berhasil
+"2.",Pelapor menyetujui klaim pada laporan yang sudah diklaim,Sistem mengubah status laporan menjadi "selesai" dan menyimpan waktu persetujuan pelapor,Status laporan berubah menjadi "selesai" dan waktu persetujuan tercatat,Berhasil
+"3.",Pelapor menolak klaim pada laporan yang sudah diklaim,Sistem membatalkan klaim, mengosongkan data klaim, dan mengembalikan status laporan menjadi "pending",Klaim dibatalkan, data klaim terhapus, status kembali "pending",Berhasil
+"4.",Petugas mengubah status laporan melalui fitur verifikasi,Sistem menyimpan perubahan status dan menampilkan status baru di detail laporan dan daftar laporan,Status laporan berubah sesuai pilihan petugas dan tampil di daftar laporan,Berhasil

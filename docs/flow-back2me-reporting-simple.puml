@@ -1,0 +1,35 @@
+@startuml
+title Flow Sederhana Sistem Pelaporan Back2Me
+
+start
+
+:'User' buka /back2me;
+if (Sudah login?) then (Tidak)
+  :'User' login;
+endif
+
+:'User' pilih "Buat Laporan";
+:'User' isi form (tipe: hilang/ditemukan,\njudul, kategori, deskripsi, lokasi, foto);
+:Server validasi input;
+if (Valid?) then (Ya)
+  :Server simpan laporan\nstatus = pending;
+  :'User' melihat daftar laporan\n+ status laporan = pending;
+else (Tidak)
+  :'User' melihat pesan error\n& perbaiki form;
+endif
+
+:'Petugas' login;
+:'Petugas' buka daftar laporan pending;
+:'Petugas' pilih salah satu laporan;
+:'Petugas' review detail laporan;
+
+if (Laporan diterima?) then (Ya)
+  :Server ubah status = diproses/selesai;
+else (Tidak)
+  :Server ubah status = ditolak;
+endif
+
+:'User' melihat status terbaru\n(pending/diproses/selesai/ditolak);
+
+stop
+@enduml
