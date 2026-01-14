@@ -25,3 +25,6 @@ Thumbs.db
 
 # Local documents/reports (jangan ikut ke repo)
 *.pdf
+
+# Local archives
+*.zip

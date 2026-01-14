@@ -9,13 +9,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Tambah 'expired' ke enum status
-        DB::statement("ALTER TABLE reports MODIFY COLUMN status ENUM('pending','diproses','selesai','ditolak','expired') DEFAULT 'pending'");
+        // Tambah 'expired' ke enum status (hanya untuk MySQL)
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE reports MODIFY COLUMN status ENUM('pending','diproses','selesai','ditolak','expired') DEFAULT 'pending'");
+        }
     }
 
     public function down(): void
     {
-        // Rollback: hapus 'expired' dari enum
-        DB::statement("ALTER TABLE reports MODIFY COLUMN status ENUM('pending','diproses','selesai','ditolak') DEFAULT 'pending'");
+        // Rollback: hapus 'expired' dari enum (hanya untuk MySQL)
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE reports MODIFY COLUMN status ENUM('pending','diproses','selesai','ditolak') DEFAULT 'pending'");
+        }
     }
 };
