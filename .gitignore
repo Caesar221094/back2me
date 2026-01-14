@@ -22,3 +22,6 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Local documents/reports (jangan ikut ke repo)
+*.pdf
